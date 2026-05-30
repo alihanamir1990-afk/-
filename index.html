@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JDTU404: NOSEY PROTOCOL</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="vignette"></div>
+<div id="scanlines"></div>
+<div id="noise-overlay"></div>
+<div id="blood-container"></div>
+<div id="glitch-bar"></div>
+
+<div id="ui">
+    <div class="stat-container">
+        <span class="label">ЗДОРОВЬЕ</span>
+        <div class="bar-bg"><div id="health-bar" class="bar health"></div></div>
+    </div>
+    <div class="stat-container">
+        <span class="label">БАТАРЕЯ</span>
+        <div class="bar-bg"><div id="battery-bar" class="bar battery"></div></div>
+    </div>
+    <div class="stat-container">
+        <span class="label">СТАМИНА</span>
+        <div class="bar-bg"><div id="stamina-bar" class="bar stamina"></div></div>
+    </div>
+    <div class="stat-container">
+        <span class="label">УСТАЛОСТЬ</span>
+        <div id="fatigue-val">0%</div>
+    </div>
+</div>
+
+<div id="sys-log">
+    <div>&gt; ПРОТОКОЛ НОЗИ АКТИВИРОВАН</div>
+    <div>&gt; СЛЕЖЕНИЕ ЗА ЦЕЛЬЮ... [ОК]</div>
+    <div>&gt; ПРЕДУПРЕЖДЕНИЕ: ОБЪЕКТ ОБНАРУЖЕН</div>
+</div>
+
+<div id="crosshair"></div>
+<div id="flash-screen"></div>
+
+<div id="menu">
+    <div class="logo-container">
+        <div class="glitch" data-text="JDTU404">JDTU404</div>
+        <div class="subtitle">NOSEY PROTOCOL</div>
+        <div class="warning-text">⚠ ОБЪЕКТ АКТИВЕН ⚠</div>
+    </div>
+    <div id="menu-prompt">— нажмите кнопку чтобы начать —</div>
+    <button id="start-btn">[ ЗАПУСТИТЬ СИСТЕМУ ]</button>
+    <div class="controls-hint">
+        [W A S D] — Передвижение &nbsp;|&nbsp; [SHIFT] — Бег<br>
+        [ЛКМ] — Открыть огонь по объекту<br>
+        <span style="color:#3a0000">Он всегда идёт за тобой.</span>
+    </div>
+    <div id="lock-notice">Кликните по экрану игры для захвата мыши</div>
+</div>
+
+<div id="death-screen">
+    <h1>ПРОТОКОЛ СОРВАН</h1>
+    <p>Объект NOSEY ликвидировал угрозу.<br>Система завершила работу.<br><br>
+    <span style="color:#220000">Нажмите F5 для перезагрузки.</span></p>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module" src="script.js"></script>
+</body>
+</html>

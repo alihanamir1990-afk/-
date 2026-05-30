@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Creepster&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+body, html {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    cursor: crosshair;
+}
+
+canvas {
+    display: block; width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; z-index: 1;
+}
+
+#vignette {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.92) 100%);
+}
+
+#scanlines {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+    animation: scanMove 8s linear infinite;
+}
+@keyframes scanMove { 0%{background-position:0 0} 100%{background-position:0 100px} }
+
+#noise-overlay {
+    position: absolute; inset: 0; z-index: 4; pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: noiseAnim 0.12s steps(1) infinite;
+}
+@keyframes noiseAnim {
+    0%,100%{transform:translate(0,0)} 20%{transform:translate(-2px,1px)}
+    40%{transform:translate(2px,-2px)} 60%{transform:translate(-1px,3px)} 80%{transform:translate(3px,-1px)}
+}
+
+#blood-container { position: absolute; top: 0; left: 0; width: 100%; z-index: 6; pointer-events: none; }
+
+.blood-drip {
+    width: 3px;
+    background: linear-gradient(to bottom, #8b0000, #3d0000);
+    border-radius: 0 0 50% 50%;
+    position: absolute; top: 0;
+    animation: drip linear infinite;
+}
+@keyframes drip { 0%{height:0;opacity:0.9} 80%{opacity:0.8} 100%{height:var(--drip-h);opacity:0} }
+
+#glitch-bar {
+    position: absolute; left: 0; width: 100%; height: 3px;
+    background: rgba(255,0,30,0.5); z-index: 9; pointer-events: none;
+    animation: glitchSweep 7s linear infinite; mix-blend-mode: screen;
+}
+@keyframes glitchSweep { 0%{top:-4px;opacity:0} 2%{opacity:0.8} 98%{opacity:0.5} 100%{top:100%;opacity:0} }
+
+/* UI */
+#ui {
+    position: absolute; top: 20px; left: 20px; z-index: 10;
+    color: #cc0000; font-size: 13px;
+    text-shadow: 0 0 8px #ff0000, 0 0 20px #800000;
+}
+.stat-container { margin-bottom: 10px; display: flex; align-items: center; }
+.label { width: 100px; font-weight: bold; color: #880000; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; }
+.bar-bg { width: 140px; height: 10px; background: rgba(100,0,0,0.2); border: 1px solid #330000; }
+.bar { height: 100%; width: 100%; transition: width 0.1s; }
+.health  { background: linear-gradient(90deg, #5a0000, #cc0000); }
+.battery { background: linear-gradient(90deg, #2a2a00, #aaaa00); }
+.stamina { background: linear-gradient(90deg, #002a00, #00aa00); }
+#fatigue-val { color: #ff3300; font-weight: bold; text-shadow: 0 0 8px #ff3300; }
+
+#sys-log {
+    position: absolute; bottom: 30px; left: 20px; z-index: 10;
+    color: #550000; font-size: 11px; line-height: 1.8;
+    text-shadow: 0 0 6px #ff000044; pointer-events: none;
+}
+
+#crosshair {
+    position: absolute; z-index: 10; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none; width: 20px; height: 20px;
+}
+#crosshair::before, #crosshair::after {
+    content: ''; position: absolute; background: rgba(200,0,0,0.7); box-shadow: 0 0 4px #ff0000;
+}
+#crosshair::before { width: 100%; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
+#crosshair::after  { width: 1px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
+
+#flash-screen { position: absolute; inset: 0; z-index: 8; background: transparent; pointer-events: none; transition: background 0.08s; }
+
+/* MENU */
+#menu {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.
+    97);
+    z-index: 200;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    color: #fff; overflow: hidden;
+}
+#menu::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 40% at 20% 30%, rgba(80,0,0,0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 80% 70%, rgba(60,0,0,0.2) 0%, transparent 70%);
+}
+
+.logo-container { text-align: center; margin-bottom: 40px; position: relative; }
+
+.glitch {
+    font-size: 80px; font-weight: bold; color: #fff; letter-spacing: 6px; position: relative;
+    font-family: 'Creepster', 'Share Tech Mono', monospace;
+    text-shadow: 3px 0 0 #ff004c, -3px -2px 0 #00ffeb, 0 0 30px rgba(255,0,0,0.5);
+    animation: glitchAnim 0.3s infinite, flicker 5s infinite;
+}
+.glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.glitch::before { animation: glitchB 0.4s infinite; color: #ff004c; clip-path: polygon(0 30%,100% 30%,100% 50%,0 50%); transform: translate(-3px,0); }
+.glitch::after  { animation: glitchC 0.3s infinite; color: #00ffeb; clip-path: polygon(0 65%,100% 65%,100% 75%,0 75%); transform: translate(3px,0); }
+
+.subtitle { font-size: 14px; letter-spacing: 10px; color: #880000; margin-top: 8px; text-transform: uppercase; text-shadow: 0 0 12px #ff000088; animation: pulse 3s infinite; }
+.warning-text { font-size: 11px; letter-spacing: 2px; color: #550000; margin-top: 6px; animation: pulse 2s infinite reverse; }
+
+#menu-prompt { font-size: 15px; color: #660000; margin-bottom: 20px; margin-top: 10px; animation: pulse 1.5s infinite; text-shadow: 0 0 10px #ff000066; letter-spacing: 2px; }
+
+#start-btn {
+    margin-bottom: 30px; padding: 14px 48px;
+    background: transparent; border: 1px solid #660000;
+    color: #cc0000; font-family: 'Share Tech Mono', monospace;
+    font-size: 16px; letter-spacing: 4px; cursor: pointer; text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(255,0,0,0.1);
+    transition: all 0.2s;
+}
+#start-btn:hover { background: rgba(100,0,0,0.25); color: #ff2200; border-color: #aa0000; box-shadow: 0 0 30px rgba(255,0,0,0.35); }
+
+.controls-hint {
+    font-size: 12px; color: #2a0000; text-align: center; line-height: 2;
+    border: 1px solid #1a0000; padding: 14px 24px; letter-spacing: 1px; background: rgba(30,0,0,0.5);
+}
+
+@keyframes glitchAnim {
+    0%{transform:translate(0);text-shadow:3px 0 0 #ff004c,-3px -2px 0 #00ffeb,0 0 30px rgba(255,0,0,0.5)}
+    20%{transform:translate(-2px,1px)} 40%{transform:translate(2px,-1px)}
+    60%{transform:translate(-1px,-1px)} 100%{transform:translate(0)}
+}
+@keyframes glitchB { 0%,95%,100%{opacity:0} 96%,98%{opacity:0.8;transform:translate(-5px,2px)} 97%,99%{opacity:0;transform:translate(5px,-2px)} }
+@keyframes glitchC { 0%,90%,100%{opacity:0} 91%,93%{opacity:0.6;transform:translate(3px,0)} 92%,94%{opacity:0;transform:translate(-3px,1px)} }
+@keyframes flicker { 0%,95%,100%{opacity:1} 96%,98%{opacity:0.3} 97%,99%{opacity:0.8} }
+@keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* Death screen */
+#death-screen {
+    display: none; position: absolute; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.96); flex-direction: column; justify-content: center; align-items: center; text-align: center;
+}
+#death-screen h1 { font-family: 'Creepster', monospace; font-size: 56px; color: #cc0000; text-shadow: 0 0 40px #ff0000, 0 0 80px #880000; letter-spacing: 4px; margin-bottom: 20px; animation: flicker 2s infinite; }
+#death-screen p  { color: #440000; font-size: 13px; letter-spacing: 2px; line-height: 2; }
+
+#lock-notice {
+    display: none; position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+    z-index: 201; color: #550000; font-size: 12px; letter-spacing: 2px; text-align: center;
+    animation: pulse 1s infinite;
+}
